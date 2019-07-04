@@ -9,7 +9,7 @@ gem "pakyow", "~> 1.0.0.rc2", require: "pakyow/all"
 #
 gem "dotenv"
 
-group :development, :prototype do
+group :development do
   # Speed up project boot time.
   #
   gem "bootsnap", require: false
