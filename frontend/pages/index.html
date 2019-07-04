@@ -1,0 +1,27 @@
+<form binding="message" ui="form" novalidate>
+  <ul ui="form-errors">
+    <li binding="error.message">
+      Error message goes here.
+    </li>
+  </ul>
+
+  <div class="form-field">
+    <input type="text" placeholder="Type your message..." binding="content" required>
+  </div>
+
+  <input type="submit" value="Create">
+</form>
+
+<article binding="message">
+  <p binding="content">
+    Message content goes here.
+  </p>
+
+  <a href="/messages/show" endpoint="messages_show">
+    View message
+  </a>
+</article>
+
+<p binding="message" version="empty">
+  No messages yet. Try creating one!
+</p>

@@ -1,0 +1,37 @@
+<a href="/">
+  Go back home
+</a>
+
+<article binding="message">
+  <p binding="content">
+    Message content goes here.
+  </p>
+
+  <hr>
+
+  <article binding="reply">
+    <p binding="content">
+      Reply content goes here.
+    </p>
+  </article>
+
+  <p binding="reply" version="empty">
+    No replies yet.
+  </p>
+
+  <hr>
+
+  <form binding="reply" ui="form">
+    <ul class="form-errors" ui="form-errors">
+      <li binding="error.message">
+        Error message goes here.
+      </li>
+    </ul>
+
+    <div class="form-field">
+      <input type="text" binding="content" placeholder="Leave a reply..." required>
+    </div>
+
+    <input type="submit" value="Reply">
+  </form>
+</article>
