@@ -3,7 +3,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby "2.6.3"
 
-gem "pakyow", "~> 1.0.0.rc2", require: "pakyow/all"
+gem "pakyow", "~> 1.0.0.rc3", require: "pakyow/all"
 
 # Easily manage environment variables.
 #
