@@ -1,5 +1,5 @@
 <form binding="message" ui="form" novalidate>
-  <ul ui="form-errors">
+  <ul class="form-errors" ui="form-errors">
     <li binding="error.message">
       Error message goes here.
     </li>
@@ -7,12 +7,11 @@
 
   <div class="form-field">
     <input type="text" placeholder="Type your message..." binding="content" required>
+    <input type="submit" value="Create" class="button">
   </div>
-
-  <input type="submit" value="Create">
 </form>
 
-<article binding="message">
+<article binding="message" dataset="order: created_at(desc)">
   <p binding="content">
     Message content goes here.
   </p>
@@ -22,6 +21,8 @@
   </a>
 </article>
 
-<p binding="message" version="empty">
-  No messages yet. Try creating one!
-</p>
+<article binding="message" version="empty">
+  <p>
+    No messages yet. Try creating one!
+  </p>
+</article>
