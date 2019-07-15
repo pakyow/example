@@ -30,27 +30,14 @@ main {
   box-sizing: border-box;
   width: 400px;
   margin: 100px auto;
-  background: $color-white;
-  border-radius: 2px;
-  padding: 15px;
 }
 
-article {
+form, article {
+  background: $color-white;
+  box-shadow: 2px 2px darken($color-light-gray, 10%);
+  border-radius: 2px;
+  padding: 15px;
   margin-top: 30px;
-  border-bottom: 1px solid $color-border;
-  padding-bottom: 30px;
-
-  &:last-of-type {
-    border: none;
-    padding-bottom: 0;
-  }
-
-  article {
-    &:first-of-type {
-      border-top: 1px solid $color-border;
-      padding-top: 30px;
-    }
-  }
 }
 
 hr {

@@ -6,12 +6,12 @@ title: "View Message | Pakyow Example"
   Go back home
 </a>
 
-<hr>
-
-<article binding="message">
-  <p binding="content">
-    Message content goes here.
-  </p>
+<section binding="message">
+  <article>
+    <p binding="content">
+      Message content goes here.
+    </p>
+  </article>
 
   <article binding="reply">
     <p binding="content">
@@ -25,8 +25,6 @@ title: "View Message | Pakyow Example"
     </p>
   </article>
 
-  <hr>
-
   <form binding="reply" ui="form">
     <ul class="form-errors" ui="form-errors">
       <li binding="error.message">
@@ -39,4 +37,4 @@ title: "View Message | Pakyow Example"
       <input type="submit" value="Reply" class="button">
     </div>
   </form>
-</article>
+</section>
