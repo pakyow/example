@@ -12,4 +12,5 @@ end
 
 Pakyow.configure :production do
   config.data.connections.sql[:default] = ENV["DATABASE_URL"]
+  config.logger.level = :internal
 end
