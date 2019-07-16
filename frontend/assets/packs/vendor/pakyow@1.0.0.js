@@ -214,7 +214,7 @@
     return _default;
   }();
 
-  var version = "1.0.0-rc.1";
+  var version = "1.0.0";
 
   var wakes = []; // Wake detection inspired by Alex MacCaw:
   //   https://blog.alexmaccaw.com/javascript-wake-event
@@ -660,7 +660,10 @@
           for (var _iterator4 = this.views[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             var view = _step4.value;
             var found = view.endpoint(name);
-            views.push(found);
+
+            if (found) {
+              views.push(found);
+            }
           }
         } catch (err) {
           _didIteratorError4 = true;
@@ -691,7 +694,10 @@
           for (var _iterator5 = this.views[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
             var view = _step5.value;
             var found = view.endpointAction();
-            views.push(found);
+
+            if (found) {
+              views.push(found);
+            }
           }
         } catch (err) {
           _didIteratorError5 = true;
@@ -722,7 +728,10 @@
           for (var _iterator6 = this.views[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
             var view = _step6.value;
             var found = view.component(name);
-            views.push(found);
+
+            if (found) {
+              views.push(found);
+            }
           }
         } catch (err) {
           _didIteratorError6 = true;
@@ -1092,6 +1101,8 @@
           }
 
           var createdView = template.clone();
+          createdView.node.dataset.id = String(object.id);
+          createdView.versions = this.templates;
 
           if (this.views.length == 0) {
             template.insertionPoint.parentNode.insertBefore(createdView.node, template.insertionPoint);
@@ -1115,7 +1126,7 @@
 
           var freshView = _template.clone();
 
-          freshView.node.dataset.id = object.id;
+          freshView.node.dataset.id = String(object.id);
           freshView.versions = this.templates; // Copy forms from current view into the new one.
           // FIXME: There may be a better way to go about this, but right now forms aren't setup for
           // ui transformations, only initial renders. This code ensures the form sticks around.
@@ -1298,7 +1309,12 @@
       key: "endpointAction",
       value: function endpointAction() {
         var endpointView = this.endpoint();
-        return endpointView.query("[data-e-a]")[0] || endpointView;
+
+        if (endpointView) {
+          return endpointView.query("[data-e-a]")[0] || endpointView;
+        } else {
+          return endpointView;
+        }
       }
     }, {
       key: "component",
@@ -1911,28 +1927,33 @@
           try {
             for (var _iterator3 = uiComponents[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
               var uiComponent = _step3.value;
-              var object = components[uiComponent.name] || this.create();
-              var instance = new object(view, Object.assign({
-                name: uiComponent.name
-              }, uiComponent.config));
-              instances.push(instance);
-              var matcher = uiComponent.name;
 
-              if (instance.config.id) {
-                matcher = "".concat(matcher, ".").concat(instance.config.id);
+              try {
+                var object = components[uiComponent.name] || this.create();
+                var instance = new object(view, Object.assign({
+                  name: uiComponent.name
+                }, uiComponent.config));
+                instances.push(instance);
+                var matcher = uiComponent.name;
+
+                if (instance.config.id) {
+                  matcher = "".concat(matcher, ".").concat(instance.config.id);
+                }
+
+                if (states[matcher]) {
+                  instance.state = states[matcher];
+                } else {
+                  instance.state = instance.config.state || "initial";
+                }
+
+                if (instance.state !== "initial") {
+                  instance.transition(instance.state);
+                }
+
+                instance.appear();
+              } catch (error) {
+                console.log("failed to initialize component `".concat(uiComponent.name, "': ").concat(error));
               }
-
-              if (states[matcher]) {
-                instance.state = states[matcher];
-              } else {
-                instance.state = instance.config.state || "initial";
-              }
-
-              if (instance.state !== "initial") {
-                instance.transition(instance.state);
-              }
-
-              instance.appear();
             }
           } catch (err) {
             _didIteratorError3 = true;
@@ -2410,24 +2431,29 @@
         try {
           var _loop = function _loop() {
             var transformation = _step2.value;
-            var methodName = transformation[0];
-            var method = transformable[methodName];
 
-            if (method) {
-              var args = transformation[1];
+            try {
+              var methodName = transformation[0];
+              var method = transformable[methodName];
 
-              if (transformation[2].length > 0) {
-                var i = 0;
-                args.push(function (view, object) {
-                  _this.transform(transformation[2][i], view);
+              if (method) {
+                var args = transformation[1];
 
-                  i++;
-                });
+                if (transformation[2].length > 0) {
+                  var i = 0;
+                  args.push(function (view, object) {
+                    _this.transform(transformation[2][i], view);
+
+                    i++;
+                  });
+                }
+
+                _this.transform(transformation[3], method.apply(transformable, args));
+              } else {
+                console.log("unknown view method: ".concat(methodName), transformable);
               }
-
-              _this.transform(transformation[3], method.apply(transformable, args));
-            } else {
-              console.log("unknown view method: ".concat(methodName), transformable);
+            } catch (error) {
+              console.log("error transforming", error, transformable, transformation, calls);
             }
           };
 
